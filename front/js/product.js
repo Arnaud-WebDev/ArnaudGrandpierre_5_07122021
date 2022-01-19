@@ -35,11 +35,16 @@ dataApi.then(async (responseData) => {
   bouton.addEventListener('click', () => {
     //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
     let productInCart = JSON.parse(localStorage.getItem('product'));
+    const priceElem = document.getElementById('quantity');
+    const colorElem = document.getElementById('colors');
     //console.log(productInCart);
     //JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
 
     const addProductInCart = () => {
       //Ajout dans le tableau de l'objet avec les values choisi par l'utilisateur :
+      response.quantity = parseInt(priceElem.value); //parseInt pour avoir un nombre entier et non une chaine de caractères
+      response.color = colorElem.value;
+
       productInCart.push(response);
       //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
       localStorage.setItem('product', JSON.stringify(productInCart));
