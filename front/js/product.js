@@ -1,31 +1,22 @@
 let searchParams = new URLSearchParams(window.location.search); //Permet de travailler avec la chaîne de requête d'une URL
-//console.log(searchParams);
+
 let id = searchParams.get('id'); //Récupère l'id de la page
-//console.log(id);
 
 const dataApi = fetch(`http://localhost:3000/api/products/${id}`);
 
 //Affichage du prix, description etc ....
 dataApi.then(async (responseData) => {
-  //console.log(responseData);
-
   let response = await responseData.json();
-  //console.log(response);
 
   const title = (document.getElementById('title').innerHTML = response.name); //Donne le nom du produit
-  //console.log(title);
 
   const price = (document.getElementById('price').innerHTML = response.price); //Donne le prix du produit
-  //console.log(price);
 
   const description = (document.getElementById('description').innerHTML = response.description); //Récupère la description du produit
-  //console.log(description);
 
   document.querySelector('.item__img img').setAttribute('src', response.imageUrl); //Récupère l'image du produit
 
   response.colors.forEach((color) => {
-    //console.log(color);
-    // console.log(`<option value="${color}">${color}</option>`);
     document.getElementById('colors').innerHTML += `<option value="${color}">${color}</option>`; //Permet d'afficher chaque couleurs des produits
   });
   document.getElementById('title_page').innerHTML = response.name; //Change le nom de l'entête de la page
@@ -33,13 +24,11 @@ dataApi.then(async (responseData) => {
   //---------------------- Bouton avec addEventListener "CHOISIR QUANTITÉ ET REFRESH LA QUANTITÉ" ------------------------------
 
   const buttonQuantity = document.getElementById('quantity');
-  //console.log(buttonQuantity);
   buttonQuantity.addEventListener('change', () => {
     const priceElem = document.getElementById('quantity');
     //parseInt pour avoir un nombre entier et non une chaine de caractères
     response.quantity = parseInt(priceElem.value);
     let refreshPrice = response.price * response.quantity;
-    //console.log(refreshPrice);
 
     //Permet d'actualisé le prix en direct sur la page
     document.getElementById('price').innerHTML = refreshPrice;
@@ -50,11 +39,11 @@ dataApi.then(async (responseData) => {
   bouton.addEventListener('click', () => {
     //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
     let productInCart = JSON.parse(localStorage.getItem('product'));
-    const priceElem = document.getElementById('quantity');
-    //console.log(priceElem);
-    const colorElem = document.getElementById('colors');
-    //console.log(productInCart);
     //JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
+
+    const priceElem = document.getElementById('quantity');
+
+    const colorElem = document.getElementById('colors');
 
     const addProductInCart = () => {
       //Ajout dans le tableau de l'objet avec les values choisi par l'utilisateur :
