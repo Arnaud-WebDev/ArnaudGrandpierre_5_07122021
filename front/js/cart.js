@@ -56,6 +56,7 @@ const deleteItem = document.querySelectorAll('.deleteItem');
 
 for (k = 0; k < productInCart.length; k++) {
   let idProduct = productInCart[k]._id;
+  //console.log(idProduct);
   let indexProduct = k;
   //console.log(idProduct);
   deleteItem[k].addEventListener('click', (e) => {
@@ -91,28 +92,37 @@ for (i = 0; i < productInCart.length; i++) {
   });
 }
 
-//------------------------------- Montant total -------------------------------------
+//------------------------------- Montant total  + quantité total -------------------------------------
 
 let total = [];
+let quantity = [];
 
 //Chercher les prix dans le panier
 for (i = 0; i < productInCart.length; i++) {
   let priceProductInCart = productInCart[i].price;
   //console.log(priceProductInCart);
+  let quantityProductInCart = productInCart[i].quantity;
+  //console.log(quantityProductInCart);
 
   //Mettre les prix du panier dans la variable total
   total.push(priceProductInCart);
-  //console.log(total);
+
+  //Mettre la quantité du panier dans la variable quantity
+  quantity.push(quantityProductInCart);
+  //console.log(quantity);
 }
 
-//Addition des prix qu'il y a dans le tableau
+//Addition de la quantité et des prix qu'il y a dans le tableau
 let reducer = (previousValue, currentValue) => previousValue + currentValue;
-let total2 = total.reduce(reducer, 0);
-//console.log(total2);
-document.getElementById('totalQuantity').innerHTML = total2;
+let totalPrice = total.reduce(reducer, 0);
+let totalQuantity = quantity.reduce(reducer, 0);
+
+//Affichage des articles et des prix dans le HTML
+document.getElementById('totalPrice').innerHTML = totalPrice;
+document.getElementById('totalQuantity').innerHTML = totalQuantity;
 
 //-------------------------------- FORMULAIRES Prénom -------------------------------------
-//Contrôle du prénom
+//Contrôle du Prénom
 
 function firstName() {
   const firstNameReg = /^[A-Za-z]{3,20}$/;
@@ -120,8 +130,10 @@ function firstName() {
   firstName.addEventListener('input', () => {
     if (firstNameReg.test(document.getElementById('firstName').value)) {
       document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom est valide`;
+      return true;
     } else {
       document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom n'est pas valide`;
+      return false;
     }
   });
 }
@@ -148,11 +160,24 @@ lastName();
 //-------------------------------- FORMULAIRES Adresse -------------------------------------
 //Contrôle de l'adresse
 
+function address() {
+  const addressReg = /^[A-Za-z0-9éèàç '']{5,50}$/;
+  let address = document.getElementById('address');
+  address.addEventListener('input', () => {
+    if (addressReg.test(document.getElementById('address').value)) {
+      document.getElementById('addressErrorMsg').innerHTML = `L'addresse est valide`;
+    } else {
+      document.getElementById('addressErrorMsg').innerHTML = `L'addresse n'est pas valide`;
+    }
+  });
+}
+address();
+
 //-------------------------------- FORMULAIRES Ville -------------------------------------
 //Contrôle de la ville
 
 function city() {
-  const cityReg = /^[A-Za-z]{3,20}$/;
+  const cityReg = /^[A-Za-z]{1,40}$/;
   let city = document.getElementById('city');
   city.addEventListener('input', () => {
     if (cityReg.test(document.getElementById('city').value)) {
@@ -203,13 +228,24 @@ buttonOrder.addEventListener('click', (e) => {
   };
 
   //Mettre l'objet "formulaireValues" dans le local storage et le transformer en chaine de caractères avec "stringify" car c'était un objet
-  localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
+  //localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
 
   //Mettre les values du formulaire et du panier dans un objet pour les envoyer vers un serveur
   const aEnvoyer = {
-    productInCart,
-    formulaireValues,
+    products: productInCart.map((product) => product._id),
+    contact: formulaireValues,
   };
+  console.log(aEnvoyer);
+  fetch(`http://localhost:3000/api/products/order`, {
+    method: 'POST',
+    body: JSON.stringify(aEnvoyer),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(async (responseData) => {
+    let response = await responseData.json();
+    window.location = 'confirmation.html?orderId=' + response.orderId;
+  });
 });
 
 //-------------------------------- Garder les identifiants quand on charge la page  -------------------------------------

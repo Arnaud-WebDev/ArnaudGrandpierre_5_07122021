@@ -7,6 +7,8 @@ const dataApi = fetch(`http://localhost:3000/api/products/${id}`);
 //Affichage du prix, description etc ....
 dataApi.then(async (responseData) => {
   let response = await responseData.json();
+  console.log('response = ');
+  console.log(response);
 
   const title = (document.getElementById('title').innerHTML = response.name); //Donne le nom du produit
 
@@ -53,7 +55,21 @@ dataApi.then(async (responseData) => {
       //Multiplication du prix par rapport à la quantité
       response.price *= response.quantity;
 
+      //Ajout du produit dans le panier
       productInCart.push(response);
+      console.log('productInCart');
+      console.log(productInCart);
+
+      productInCart.forEach((e) => {
+        console.log('e');
+        console.log(e);
+      });
+
+      /*  for (let i = 0; i < productInCart.length; i++) {
+        console.log('productInCart[i] ');
+        console.log(productInCart[i]);
+        console.log(productInCart.find((response) => response._id == productInCart[i]._id));
+      } */
       //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
       localStorage.setItem('product', JSON.stringify(productInCart));
     };
