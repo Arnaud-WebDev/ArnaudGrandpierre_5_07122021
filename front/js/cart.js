@@ -1,13 +1,11 @@
 //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
 let productInCart = JSON.parse(localStorage.getItem('product'));
-//console.log('productInCart = ');
-//console.log(productInCart);
+
 //JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
 
 //--------------------------- Affichage des produits du panier ---------------------------
 //Sélection de la classe où je vais injecter le HTML
 const cartItems = document.getElementById('cart__items');
-//console.log(cartItems);
 
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart == 0) {
@@ -46,7 +44,7 @@ if (productInCart === null || productInCart == 0) {
   }
 
   if (i == productInCart.length) {
-    cartItems.innerHTML = strutureProductCart;
+    cartItems.innerHTML = `${strutureProductCart}`;
   }
 }
 
@@ -125,14 +123,15 @@ document.getElementById('totalQuantity').innerHTML = totalQuantity;
 //Contrôle du Prénom
 
 function firstName() {
-  const firstNameReg = /^[A-Za-z]{3,20}$/;
+  const firstNameReg = /^[A-Za-z]{0,20}$/;
   let firstName = document.getElementById('firstName');
   firstName.addEventListener('input', () => {
     if (firstNameReg.test(document.getElementById('firstName').value)) {
-      document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom est valide`;
+      document.getElementById('firstNameErrorMsg').innerText = `Le prénom est valide`;
       return true;
     } else {
-      document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom n'est pas valide`;
+      document.getElementById('firstNameErrorMsg').innerText = `Le prénom n'est pas valide`;
+      alert('Chiffre et symbole ne sont pas autorisé \n Ne pas depasser 20 caractères');
       return false;
     }
   });
@@ -149,8 +148,10 @@ function lastName() {
   lastName.addEventListener('input', () => {
     if (lastNameReg.test(document.getElementById('lastName').value)) {
       document.getElementById('lastNameErrorMsg').innerHTML = `Le nom est valide`;
+      return true;
     } else {
       document.getElementById('lastNameErrorMsg').innerHTML = `Le nom n'est pas valide`;
+      return false;
     }
   });
 }
@@ -166,8 +167,10 @@ function address() {
   address.addEventListener('input', () => {
     if (addressReg.test(document.getElementById('address').value)) {
       document.getElementById('addressErrorMsg').innerHTML = `L'addresse est valide`;
+      return true;
     } else {
       document.getElementById('addressErrorMsg').innerHTML = `L'addresse n'est pas valide`;
+      return false;
     }
   });
 }
@@ -177,13 +180,15 @@ address();
 //Contrôle de la ville
 
 function city() {
-  const cityReg = /^[A-Za-z]{1,40}$/;
+  const cityReg = /^[A-Za-z-éèàçù '']{1,40}$/;
   let city = document.getElementById('city');
   city.addEventListener('input', () => {
     if (cityReg.test(document.getElementById('city').value)) {
       document.getElementById('cityErrorMsg').innerHTML = `La ville est valide`;
+      return true;
     } else {
       document.getElementById('cityErrorMsg').innerHTML = `La ville n'est pas valide`;
+      return false;
     }
   });
 }
@@ -201,11 +206,12 @@ function validationMail() {
     if (emailReg.test(document.getElementById('email').value)) {
       document.getElementById('emailErrorMsg').innerHTML = `L'adresse mail est valide`;
       document.getElementById('emailErrorMsg').style.color = '#9dfc58';
+      return true;
     } else {
       document.getElementById('emailErrorMsg').innerHTML = `L'adresse mail n'est pas valide &#9888`;
       document.getElementById('emailErrorMsg').style.color = '#ff2a00';
+      return false;
     }
-    return false;
   });
 }
 
@@ -218,6 +224,7 @@ const buttonOrder = document.getElementById('order');
 
 buttonOrder.addEventListener('click', (e) => {
   e.preventDefault();
+
   //Récupération des valeurs formulaire
   const formulaireValues = {
     firstName: document.getElementById('firstName').value,
@@ -228,10 +235,15 @@ buttonOrder.addEventListener('click', (e) => {
   };
 
   //Mettre l'objet "formulaireValues" dans le local storage et le transformer en chaine de caractères avec "stringify" car c'était un objet
-  //localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
+  if (firstName() && lastName() && address() && city() && validationMail()) {
+    console.log('erreur');
+    localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
+  } else {
+    alert('Veuillez remplir correctement le formulaire');
+  }
 
   //Mettre les values du formulaire et du panier dans un objet pour les envoyer vers un serveur
-  const aEnvoyer = {
+  /*  const aEnvoyer = {
     products: productInCart.map((product) => product._id),
     contact: formulaireValues,
   };
@@ -245,12 +257,13 @@ buttonOrder.addEventListener('click', (e) => {
   }).then(async (responseData) => {
     let response = await responseData.json();
     window.location = 'confirmation.html?orderId=' + response.orderId;
-  });
+  }); */
+  //document.getElementById('orderId').innerHTML = `${response.orderId}`;
 });
 
 //-------------------------------- Garder les identifiants quand on charge la page  -------------------------------------
 
-//Prendre la key dans le localstorage et la mettre dans une variable
+/* //Prendre la key dans le localstorage et la mettre dans une variable
 const dataLocalStorage = localStorage.getItem('formulaireValues');
 //console.log(dataLocalStorage);
 
@@ -269,3 +282,4 @@ champsRempli('lastName');
 champsRempli('address');
 champsRempli('city');
 champsRempli('email');
+ */

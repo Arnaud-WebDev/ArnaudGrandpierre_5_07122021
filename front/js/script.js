@@ -2,6 +2,9 @@ fetch('http://localhost:3000/api/products')
   .then((response) => response.json())
   .then((data) => {
     renderProducts(data);
+  })
+  .catch((error) => {
+    document.getElementById('items').innerText = `Une erreur s'est produite lors du chargement de la page en voici la cause : ${error}`;
   });
 
 function renderProducts(products) {
