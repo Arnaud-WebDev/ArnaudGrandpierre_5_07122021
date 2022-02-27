@@ -51,7 +51,7 @@ dataApi.then(async (responseData) => {
       response.color = colorElem.value;
 
       //Multiplication du prix par rapport à la quantité
-      // response.price *= response.quantity;
+      //response.price * response.quantity;
 
       //Incrémentation du produit dans le panier si celui-ci existe déjà (même couleur, id etc ....)
       let isNew = true;
