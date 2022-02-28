@@ -107,7 +107,7 @@ for (let i = 0; i < productInCart.length; i++) {
     quantityValue = parseInt(boutonQuantity[index].value);
     productInCart[index].quantity = parseInt(quantityValue);
     localStorage.setItem('product', JSON.stringify(productInCart));
-    // location.reload(); permet de recharger la page en vue de mettre à jour le localStorage
+    location.reload(); // permet de recharger la page en vue de mettre à jour le localStorage
 
     document.getElementById('priceCart' + index).innerHTML = ` ${total} €`;
     //document.getElementById('totalQuantity').innerHTML = `${quantityValue}`;
