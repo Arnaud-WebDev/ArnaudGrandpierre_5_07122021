@@ -118,7 +118,7 @@ for (let i = 0; i < productInCart.length; i++) {
 //Contrôle du Prénom
 
 function firstName() {
-  const firstNameReg = /^[A-Za-z]{3,20}$/;
+  const firstNameReg = /^[A-Za-zïîëä]{3,20}$/;
   const firstName = document.getElementById('firstName');
 
   if (firstNameReg.test(firstName.value)) {
