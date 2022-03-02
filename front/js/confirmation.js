@@ -6,3 +6,5 @@ let orderId = searchParams.get('orderId');
 console.log(orderId);
 
 document.getElementById('orderId').innerHTML = `${orderId}`;
+
+localStorage.clear();
