@@ -1,6 +1,5 @@
 //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
 let productInCart = JSON.parse(localStorage.getItem('product'));
-//console.log(productInCart);
 //JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
 
 //--------------------------- Affichage des produits du panier ---------------------------
@@ -10,8 +9,7 @@ const cartItems = document.getElementById('cart__items');
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart == 0) {
   const cartEmpty = `<h2> Le panier est vide</h2>`;
-  cartItems.innerHTML = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
-  // console.log('je suis vide');
+  cartItems.innerHTML = `${cartEmpty}`; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
 } else {
   //Si le panier n'est pas vide : afficher les produits dans le local storage
   let strutureProductCart = [];
@@ -43,7 +41,7 @@ if (productInCart === null || productInCart == 0) {
                   `;
   }
 
-  if (i == productInCart.length) {
+  if (i === productInCart.length) {
     cartItems.innerHTML = `${strutureProductCart}`;
   }
 }
