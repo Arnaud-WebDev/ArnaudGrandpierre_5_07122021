@@ -7,17 +7,15 @@ let productInCart = JSON.parse(localStorage.getItem('product'));
 const cartItems = document.getElementById('cart__items');
 
 //Si le panier est vide : afficher le panier vide
-if (productInCart === null || productInCart == 0) {
+if (productInCart === null || productInCart === 0) {
   const cartEmpty = `<h2> Le panier est vide</h2>`;
   cartItems.innerHTML = `${cartEmpty}`; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
 } else {
   //Si le panier n'est pas vide : afficher les produits dans le local storage
-  let strutureProductCart = [];
+  let structureProductCart = [];
 
   for (i = 0; i < productInCart.length; i++) {
-    strutureProductCart =
-      strutureProductCart +
-      `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+    let produit = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
                 <div class="cart__item__img">
                   <img src="${productInCart[i].imageUrl}" alt="Photographie d'un canapé" />
                 </div>
@@ -39,32 +37,29 @@ if (productInCart === null || productInCart == 0) {
                   </div>
                   </article>
                   `;
+    structureProductCart.push(produit);
   }
 
   if (i === productInCart.length) {
-    cartItems.innerHTML = `${strutureProductCart}`;
+    cartItems.innerHTML = `${structureProductCart}`;
   }
 }
 
 //---------------------- L'id d'un produit + Bouton supprimer------------------
 const deleteItem = document.querySelectorAll('.deleteItem');
-//console.log(deleteItem);
 
 for (k = 0; k < productInCart.length; k++) {
-  let idProduct = productInCart[k]._id;
-  //console.log(idProduct);
   let indexProduct = k;
-  //console.log(idProduct);
+
   deleteItem[k].addEventListener('click', (e) => {
     e.preventDefault();
-    //console.log(indexProduct);
     productInCart.splice(indexProduct, 1);
 
     //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
     localStorage.setItem('product', JSON.stringify(productInCart));
 
     //Rechargement de la page pour qu'elle s'actualise
-    window.location.href = 'cart.html';
+    location.reload();
   });
 }
 
@@ -87,6 +82,7 @@ function updateQuantityAndPrice() {
 }
 
 updateQuantityAndPrice();
+
 //---------------------- Bouton quantité ------------------
 
 const boutonQuantity = document.querySelectorAll('.itemQuantity');
@@ -94,21 +90,20 @@ const boutonQuantity = document.querySelectorAll('.itemQuantity');
 for (let i = 0; i < productInCart.length; i++) {
   let quantityValue = productInCart[i].quantity;
   let price = productInCart[i].price;
-  //console.log(price);
+
   let index = i;
-  let priceProductInCart = productInCart[i].price * productInCart[i].quantity;
-  console.log(priceProductInCart);
 
   boutonQuantity[i].addEventListener('change', () => {
-    let total = price * parseInt(boutonQuantity[index].value);
-    console.log(total);
-    quantityValue = parseInt(boutonQuantity[index].value);
-    productInCart[index].quantity = parseInt(quantityValue);
-    localStorage.setItem('product', JSON.stringify(productInCart));
+    quantityValue = parseInt(boutonQuantity[index].value); // Passe les quantités en nombre entier
+    productInCart[index].quantity = quantityValue; // Passe les quantité en nombre entier sur tous les produits
+
+    let total = price * quantityValue;
+
+    localStorage.setItem('product', JSON.stringify(productInCart)); //Modifie le localStorage
     location.reload(); // permet de recharger la page en vue de mettre à jour le localStorage
 
     document.getElementById('priceCart' + index).innerHTML = ` ${total} €`;
-    //document.getElementById('totalQuantity').innerHTML = `${quantityValue}`;
+
     document.getElementById('totalPrice').innerHTML = `${total}`;
   });
 }
@@ -116,7 +111,7 @@ for (let i = 0; i < productInCart.length; i++) {
 //Contrôle du Prénom
 
 function firstName() {
-  const firstNameReg = /^[A-Za-zïîëä]{3,20}$/;
+  const firstNameReg = /^[A-Za-z-ïîëäéèôâêç]{3,20}$/;
   const firstName = document.getElementById('firstName');
 
   if (firstNameReg.test(firstName.value)) {
@@ -132,7 +127,7 @@ function firstName() {
 //Contrôle du Nom
 
 function lastName() {
-  const lastNameReg = /^[A-Za-z]{3,20}$/;
+  const lastNameReg = /^[A-Za-z-ïëäéèîôâêç]{3,20}$/;
   const lastName = document.getElementById('lastName');
 
   if (lastNameReg.test(lastName.value)) {
