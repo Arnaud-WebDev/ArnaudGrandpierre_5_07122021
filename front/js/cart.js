@@ -39,7 +39,6 @@ if (productInCart === null || productInCart === 0) {
                   `;
     structureProductCart.push(produit);
   }
-
   if (i === productInCart.length) {
     cartItems.innerHTML = `${structureProductCart}`;
   }
@@ -116,9 +115,11 @@ function firstName() {
 
   if (firstNameReg.test(firstName.value)) {
     document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom est valide`;
+    document.getElementById('firstNameErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
     document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom n'est pas valide`;
+    document.getElementById('firstNameErrorMsg').style.color = '#ff2a00';
     return false;
   }
 }
@@ -132,9 +133,11 @@ function lastName() {
 
   if (lastNameReg.test(lastName.value)) {
     document.getElementById('lastNameErrorMsg').innerHTML = `Le nom est valide`;
+    document.getElementById('lastNameErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
     document.getElementById('lastNameErrorMsg').innerHTML = `Le nom n'est pas valide`;
+    document.getElementById('lastNameErrorMsg').style.color = '#ff2a00';
     return false;
   }
 }
@@ -143,14 +146,16 @@ function lastName() {
 //Contrôle de l'adresse
 
 function address() {
-  const addressReg = /^[A-Za-z0-9éèàç '']{5,50}$/;
+  const addressReg = /^[A-Za-z0-9éèàçù '']{5,50}$/;
   const address = document.getElementById('address');
 
   if (addressReg.test(address.value)) {
     document.getElementById('addressErrorMsg').innerHTML = `L'addresse est valide`;
+    document.getElementById('addressErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
     document.getElementById('addressErrorMsg').innerHTML = `L'addresse n'est pas valide`;
+    document.getElementById('addressErrorMsg').style.color = '#ff2a00';
     return false;
   }
 }
@@ -164,9 +169,11 @@ function city() {
 
   if (cityReg.test(city.value)) {
     document.getElementById('cityErrorMsg').innerHTML = `La ville est valide`;
+    document.getElementById('cityErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
     document.getElementById('cityErrorMsg').innerHTML = `La ville n'est pas valide`;
+    document.getElementById('cityErrorMsg').style.color = '#ff2a00';
     return false;
   }
 }
@@ -189,7 +196,7 @@ function validationMail() {
   }
 }
 
-//Permet de mettre un event listener sur les fonctions firstName(), lastName(), city() etc .... Pour permettre à ma condition de push ou non dans le local storage sir les input sont correctement rempli
+//Permet de mettre un event listener sur les fonctions firstName(), lastName(), city() etc .... Pour permettre à ma condition de push ou non dans le local storage si les input sont correctement rempli
 function loadFormEvent() {
   const firstNameElement = document.getElementById('firstName');
   firstNameElement.addEventListener('input', () => {
@@ -216,7 +223,6 @@ loadFormEvent();
 //-------------------------------- Bouton Commander -------------------------------------
 
 const formOrder = document.getElementById('formOrder');
-//console.log(buttonOrder);
 
 formOrder.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -244,7 +250,7 @@ formOrder.addEventListener('submit', (e) => {
     products: productInCart.map((product) => product._id),
     contact: formulaireValues,
   };
-  //console.log(aEnvoyer);
+
   fetch(`http://localhost:3000/api/products/order`, {
     method: 'POST',
     body: JSON.stringify(aEnvoyer),
@@ -253,7 +259,7 @@ formOrder.addEventListener('submit', (e) => {
     },
   }).then(async (responseData) => {
     let response = await responseData.json();
-    window.location = 'confirmation.html?orderId=' + response.orderId;
+    window.location = `confirmation.html?orderId= ${response.orderId} `;
   });
 });
 

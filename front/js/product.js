@@ -1,6 +1,6 @@
-let searchParams = new URLSearchParams(window.location.search); //Permet de travailler avec la chaîne de requête d'une URL
+const searchParams = new URLSearchParams(window.location.search); //Permet de travailler avec la chaîne de requête d'une URL
 
-let id = searchParams.get('id'); //Récupère l'id de la page
+const id = searchParams.get('id'); //Récupère l'id de la page
 
 const dataApi = fetch(`http://localhost:3000/api/products/${id}`);
 
