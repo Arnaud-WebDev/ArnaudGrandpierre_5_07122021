@@ -8,6 +8,7 @@ const cartItems = document.getElementById('cart__items');
 
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart === 0) {
+  loadFormEvent();
   alert('Le panier est vide');
   const cartEmpty = 'Le panier est vide';
   cartItems.innerText = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
@@ -219,7 +220,9 @@ function loadFormEvent() {
     validationMail();
   });
 }
+
 loadFormEvent();
+
 //-------------------------------- Bouton Commander -------------------------------------
 
 const formOrder = document.getElementById('formOrder');
