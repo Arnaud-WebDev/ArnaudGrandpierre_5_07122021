@@ -8,7 +8,7 @@ const cartItems = document.getElementById('cart__items');
 
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart === 0) {
-  loadFormEvent();
+  loadFormEvent(); //Fonction créee plus bas, je me sers  ici du hoisting
   alert('Le panier est vide');
   const cartEmpty = 'Le panier est vide';
   cartItems.innerText = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
@@ -151,11 +151,11 @@ function address() {
   const address = document.getElementById('address');
 
   if (addressReg.test(address.value)) {
-    document.getElementById('addressErrorMsg').innerText = "L'addresse est valide";
+    document.getElementById('addressErrorMsg').innerText = "L'adresse est valide";
     document.getElementById('addressErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('addressErrorMsg').innerText = "L'addresse n'est pas valide";
+    document.getElementById('addressErrorMsg').innerText = "L'adresse n'est pas valide";
     document.getElementById('addressErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -262,7 +262,7 @@ formOrder.addEventListener('submit', (e) => {
     },
   }).then(async (responseData) => {
     let response = await responseData.json();
-    window.location = `confirmation.html?orderId= ${response.orderId} `;
+    window.location = 'confirmation.html?orderId=' + response.orderId;
   });
 });
 
