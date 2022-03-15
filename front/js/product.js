@@ -8,18 +8,18 @@ const dataApi = fetch(`http://localhost:3000/api/products/${id}`);
 dataApi.then(async (responseData) => {
   let response = await responseData.json();
 
-  const title = (document.getElementById('title').innerHTML = `${response.name}`); //Donne le nom du produit
+  const title = (document.getElementById('title').innerText = response.name); //Donne le nom du produit
 
-  const price = (document.getElementById('price').innerHTML = `${response.price}`); //Donne le prix du produit
+  const price = (document.getElementById('price').innerText = response.price); //Donne le prix du produit
 
-  const description = (document.getElementById('description').innerHTML = `${response.description}`); //Récupère la description du produit
+  const description = (document.getElementById('description').innerText = response.description); //Récupère la description du produit
 
   document.querySelector('.item__img img').setAttribute('src', response.imageUrl); //Récupère l'image du produit
 
   response.colors.forEach((color) => {
     document.getElementById('colors').innerHTML += `<option value="${color}">${color}</option>`; //Permet d'afficher chaque couleurs des produits
   });
-  document.getElementById('title_page').innerHTML = `${response.name}`; //Change le nom de l'entête de la page
+  document.getElementById('title_page').innerText = response.name; //Change le nom de l'entête de la page
 
   //---------------------- Bouton avec addEventListener "CHOISIR QUANTITÉ ET REFRESH LA QUANTITÉ" ------------------------------
 
@@ -30,7 +30,7 @@ dataApi.then(async (responseData) => {
     let refreshPrice = response.price * response.quantity;
 
     //Permet d'actualisé le prix en direct sur la page
-    document.getElementById('price').innerHTML = `${refreshPrice}`;
+    document.getElementById('price').innerText = refreshPrice;
   });
 
   //---------------------- Bouton avec addEventListener "AJOUTER AU PANIER" ------------------------------
@@ -57,11 +57,15 @@ dataApi.then(async (responseData) => {
         if (prod._id === response._id && prod.color === response.color) {
           prod.quantity += response.quantity;
           isNew = false;
+          alert('Produit ajouter au panier');
         }
         return prod;
       });
 
-      if (isNew) productInCart.push(response);
+      if (isNew) {
+        productInCart.push(response);
+        alert('Produit ajouter au panier');
+      }
 
       //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
       localStorage.setItem('product', JSON.stringify(productInCart));

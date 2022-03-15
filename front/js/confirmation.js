@@ -4,6 +4,6 @@ const searchParams = new URLSearchParams(window.location.search);
 //Récupère l'orderId de la page
 const orderId = searchParams.get('orderId');
 
-document.getElementById('orderId').innerHTML = `${orderId}`;
+document.getElementById('orderId').innerText = orderId;
 
 localStorage.clear();

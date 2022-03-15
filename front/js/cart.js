@@ -8,8 +8,9 @@ const cartItems = document.getElementById('cart__items');
 
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart === 0) {
-  const cartEmpty = `<h2> Le panier est vide</h2>`;
-  cartItems.innerHTML = `${cartEmpty}`; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
+  alert('Le panier est vide');
+  const cartEmpty = 'Le panier est vide';
+  cartItems.innerText = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
 } else {
   //Si le panier n'est pas vide : afficher les produits dans le local storage
   let structureProductCart = [];
@@ -43,7 +44,6 @@ if (productInCart === null || productInCart === 0) {
     cartItems.innerHTML = `${structureProductCart}`;
   }
 }
-
 //---------------------- L'id d'un produit + Bouton supprimer------------------
 const deleteItem = document.querySelectorAll('.deleteItem');
 
@@ -76,8 +76,8 @@ function updateQuantityAndPrice() {
     quantity += quantityProductInCart;
   }
   //Affichage des articles et des prix dans le HTML
-  document.getElementById('totalPrice').innerHTML = `${total}`;
-  document.getElementById('totalQuantity').innerHTML = `${quantity}`;
+  document.getElementById('totalPrice').innerText = total;
+  document.getElementById('totalQuantity').innerText = quantity;
 }
 
 updateQuantityAndPrice();
@@ -101,9 +101,9 @@ for (let i = 0; i < productInCart.length; i++) {
     localStorage.setItem('product', JSON.stringify(productInCart)); //Modifie le localStorage
     location.reload(); // permet de recharger la page en vue de mettre à jour le localStorage
 
-    document.getElementById('priceCart' + index).innerHTML = ` ${total} €`;
+    document.getElementById('priceCart' + index).innerText = total;
 
-    document.getElementById('totalPrice').innerHTML = `${total}`;
+    document.getElementById('totalPrice').innerText = total;
   });
 }
 //-------------------------------- FORMULAIRES Prénom -------------------------------------
@@ -114,11 +114,11 @@ function firstName() {
   const firstName = document.getElementById('firstName');
 
   if (firstNameReg.test(firstName.value)) {
-    document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom est valide`;
+    document.getElementById('firstNameErrorMsg').innerText = `Le prénom est valide`;
     document.getElementById('firstNameErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('firstNameErrorMsg').innerHTML = `Le prénom n'est pas valide`;
+    document.getElementById('firstNameErrorMsg').innerText = `Le prénom n'est pas valide`;
     document.getElementById('firstNameErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -132,11 +132,11 @@ function lastName() {
   const lastName = document.getElementById('lastName');
 
   if (lastNameReg.test(lastName.value)) {
-    document.getElementById('lastNameErrorMsg').innerHTML = `Le nom est valide`;
+    document.getElementById('lastNameErrorMsg').innerText = 'Le nom est valide';
     document.getElementById('lastNameErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('lastNameErrorMsg').innerHTML = `Le nom n'est pas valide`;
+    document.getElementById('lastNameErrorMsg').innerText = "Le nom n'est pas valide";
     document.getElementById('lastNameErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -150,11 +150,11 @@ function address() {
   const address = document.getElementById('address');
 
   if (addressReg.test(address.value)) {
-    document.getElementById('addressErrorMsg').innerHTML = `L'addresse est valide`;
+    document.getElementById('addressErrorMsg').innerText = "L'addresse est valide";
     document.getElementById('addressErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('addressErrorMsg').innerHTML = `L'addresse n'est pas valide`;
+    document.getElementById('addressErrorMsg').innerText = "L'addresse n'est pas valide";
     document.getElementById('addressErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -168,11 +168,11 @@ function city() {
   const city = document.getElementById('city');
 
   if (cityReg.test(city.value)) {
-    document.getElementById('cityErrorMsg').innerHTML = `La ville est valide`;
+    document.getElementById('cityErrorMsg').innerText = 'La ville est valide';
     document.getElementById('cityErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('cityErrorMsg').innerHTML = `La ville n'est pas valide`;
+    document.getElementById('cityErrorMsg').innerText = "La ville n'est pas valide";
     document.getElementById('cityErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -186,11 +186,11 @@ function validationMail() {
   const email = document.getElementById('email');
 
   if (emailReg.test(email.value) && email.value !== '') {
-    document.getElementById('emailErrorMsg').innerHTML = `L'adresse mail est valide`;
+    document.getElementById('emailErrorMsg').innerText = "L'adresse mail est valide";
     document.getElementById('emailErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('emailErrorMsg').innerHTML = `L'adresse mail n'est pas valide &#9888`;
+    document.getElementById('emailErrorMsg').innerText = "L'adresse mail n'est pas valide &#9888";
     document.getElementById('emailErrorMsg').style.color = '#ff2a00';
     return false;
   }
@@ -263,7 +263,7 @@ formOrder.addEventListener('submit', (e) => {
   });
 });
 
-//-------------------------------- Garder les identifiants quand on charge la page  -------------------------------------
+/* //-------------------------------- Garder les identifiants quand on charge la page  -------------------------------------
 
 //Prendre la key dans le localstorage et la mettre dans une variable
 const dataLocalStorage = localStorage.getItem('formulaireValues');
@@ -284,3 +284,4 @@ champsRempli('lastName');
 champsRempli('address');
 champsRempli('city');
 champsRempli('email');
+ */
