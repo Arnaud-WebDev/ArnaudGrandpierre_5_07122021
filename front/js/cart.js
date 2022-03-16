@@ -5,10 +5,9 @@ let productInCart = JSON.parse(localStorage.getItem('product'));
 //--------------------------- Affichage des produits du panier ---------------------------
 //Sélection de la classe où je vais injecter le HTML
 const cartItems = document.getElementById('cart__items');
-
 //Si le panier est vide : afficher le panier vide
 if (productInCart === null || productInCart === 0) {
-  loadFormEvent(); //Fonction créee plus bas, je me sers  ici du hoisting
+  productInCart = [];
   alert('Le panier est vide');
   const cartEmpty = 'Le panier est vide';
   cartItems.innerText = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
@@ -115,11 +114,11 @@ function firstName() {
   const firstName = document.getElementById('firstName');
 
   if (firstNameReg.test(firstName.value)) {
-    document.getElementById('firstNameErrorMsg').innerText = `Le prénom est valide`;
+    document.getElementById('firstNameErrorMsg').innerText = 'Le prénom est valide';
     document.getElementById('firstNameErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('firstNameErrorMsg').innerText = `Le prénom n'est pas valide`;
+    document.getElementById('firstNameErrorMsg').innerText = "Le prénom n'est pas valide";
     document.getElementById('firstNameErrorMsg').style.color = '#ff2a00';
     return false;
   }
