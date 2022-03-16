@@ -59,6 +59,10 @@ for (k = 0; k < productInCart.length; k++) {
 
     //Rechargement de la page pour qu'elle s'actualise
     location.reload();
+
+    if (productInCart === null || (Array.isArray(productInCart) && productInCart.length === 0)) {
+      localStorage.clear();
+    }
   });
 }
 
