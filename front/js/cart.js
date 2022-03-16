@@ -60,6 +60,7 @@ for (k = 0; k < productInCart.length; k++) {
     //Rechargement de la page pour qu'elle s'actualise
     location.reload();
 
+    //Permet de vider le localStorage si c'est le dernier produit, car il renvoi un tableau vide
     if (productInCart === null || (Array.isArray(productInCart) && productInCart.length === 0)) {
       localStorage.clear();
     }
