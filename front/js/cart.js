@@ -195,7 +195,7 @@ function validationMail() {
     document.getElementById('emailErrorMsg').style.color = '#9dfc58';
     return true;
   } else {
-    document.getElementById('emailErrorMsg').innerText = "L'adresse mail n'est pas valide &#9888";
+    document.getElementById('emailErrorMsg').innerHTML = "L'adresse mail n'est pas valide &#9888";
     document.getElementById('emailErrorMsg').style.color = '#ff2a00';
     return false;
   }
