@@ -266,7 +266,7 @@ formOrder.addEventListener('submit', (e) => {
     (firstName() && lastName() && address() && city() && validationMail() && productInCart === null) ||
     (firstName() && lastName() && address() && city() && validationMail() && Array.isArray(productInCart) && productInCart.length === 0)
   ) {
-    alert('Veuillez remplir le panier');
+    alert('Veuillez remplir le panier avant de pouvoir envoyer le formulaire');
     return false;
   } else {
     alert('Veuillez remplir correctement le formulaire');
