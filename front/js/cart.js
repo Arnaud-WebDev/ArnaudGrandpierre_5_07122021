@@ -256,13 +256,23 @@ formOrder.addEventListener('submit', (e) => {
   };
 
   //Mettre l'objet "formulaireValues" dans le local storage et le transformer en chaine de caractères avec "stringify" car c'était un objet
+  if (firstName() && lastName() && address() && city() && validationMail() && productInCart === null) {
+    alert('Veuillez remplir votre panier');
+  }
 
   if (firstName() && lastName() && address() && city() && validationMail() && productInCart.length) {
     localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
+  } else if (
+    (firstName() && lastName() && address() && city() && validationMail() && productInCart === null) ||
+    (firstName() && lastName() && address() && city() && validationMail() && Array.isArray(productInCart) && productInCart.length === 0)
+  ) {
+    alert('veuillez remplir le panier');
+    return false;
   } else {
     alert('Veuillez remplir correctement le formulaire');
     return false;
   }
+
   //Mettre les values du formulaire et du panier dans un objet pour les envoyer vers un serveur
   const aEnvoyer = {
     products: productInCart.map((product) => product._id),
