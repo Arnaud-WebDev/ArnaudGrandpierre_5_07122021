@@ -7,6 +7,7 @@ const dataApi = fetch(`http://localhost:3000/api/products/${id}`);
 //Affichage du prix, description etc ....
 dataApi.then(async (responseData) => {
   let response = await responseData.json();
+  console.log(response);
 
   const title = (document.getElementById('title').innerText = response.name); //Donne le nom du produit
 
@@ -39,7 +40,6 @@ dataApi.then(async (responseData) => {
   bouton.addEventListener('click', () => {
     //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
     let productInCart = JSON.parse(localStorage.getItem('product'));
-
     //JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
 
     const priceElem = document.getElementById('quantity');
@@ -61,6 +61,23 @@ dataApi.then(async (responseData) => {
         }
         return prod;
       });
+
+      const productInCartId = response._id;
+      const productInCartColor = response.color;
+      const productInCartQuantity = response.quantity;
+      const productInCartImage = response.imageUrl;
+      const productInCartName = response.name;
+      const productInCartDescription = response.description;
+      console.log(productInCartImage);
+
+      response = {
+        _id: productInCartId,
+        color: productInCartColor,
+        quantity: productInCartQuantity,
+        imageUrl: productInCartImage,
+        name: productInCartName,
+        description: productInCartDescription,
+      };
 
       if (isNew) {
         productInCart.push(response);

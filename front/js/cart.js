@@ -1,6 +1,6 @@
 //Déclaration de la variable 'productInCart' dans laquelle on met les key et les values qui sont dans le local storage :
 let productInCart = JSON.parse(localStorage.getItem('product'));
-//JSON.parse c'est pour convertir les données au format JSON qui sont dans le local storage en objet JavaScript
+//console.log(productInCart);
 
 //--------------------------- Affichage des produits du panier ---------------------------
 //Sélection de la classe où je vais injecter le HTML
@@ -12,103 +12,115 @@ if (productInCart === null || productInCart === 0) {
   const cartEmpty = 'Le panier est vide';
   cartItems.innerText = cartEmpty; //Affiche 'Le panier est vide' quand aucun produits n'a été ajouté dans le panier
 } else {
-  //Si le panier n'est pas vide : afficher les produits dans le local storage
-  let structureProductCart = [];
+  const dataApi = fetch(`http://localhost:3000/api/products`);
+  //Affichage du prix, description etc ....
 
-  for (i = 0; i < productInCart.length; i++) {
-    let produit = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-                <div class="cart__item__img">
+  dataApi.then(async (responseData) => {
+    let response = await responseData.json();
+    productInCart = productInCart.map((product) => {
+      product.price = response.find((r) => {
+        return r._id === product._id;
+      }).price;
+      return product;
+    });
+    //Si le panier n'est pas vide : afficher les produits dans le local storage
+    let structureProductCart = [];
+    for (i = 0; i < productInCart.length; i++) {
+      const produit = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+                  <div class="cart__item__img">
                   <img src="${productInCart[i].imageUrl}" alt="Photographie d'un canapé" />
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>${productInCart[i].name}</h2>
-                    <p>${productInCart[i].color}</p>
-                    <p id="priceCart${i}">${productInCart[i].price * productInCart[i].quantity}€</p>
                   </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
+                  <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                  <h2>${productInCart[i].name}</h2>
+                  <p>${productInCart[i].color}</p>
+                  <p id="priceCart${i}">${productInCart[i].price * productInCart[i].quantity}€</p>
+                  </div>
+                      <div class="cart__item__content__settings">
+                      <div class="cart__item__content__settings__quantity">
                       <p>Qté :</p>
                       <input type="number" class="itemQuantity"  name="itemQuantity" min="1" max="100" value="${productInCart[i].quantity}" />
-                    </div>
-                    <div class="cart__item__content__settings__delete">
+                      </div>
+                      <div class="cart__item__content__settings__delete">
                       <p class="deleteItem">Supprimer</p>
-                    </div>
-                  </div>
-                  </div>
-                  </article>
-                  `;
-    structureProductCart.push(produit);
-  }
-  if (i === productInCart.length) {
-    cartItems.innerHTML = `${structureProductCart}`;
-  }
-}
-//---------------------- L'id d'un produit + Bouton supprimer------------------
-const deleteItem = document.querySelectorAll('.deleteItem');
-
-for (k = 0; k < productInCart.length; k++) {
-  let indexProduct = k;
-
-  deleteItem[k].addEventListener('click', (e) => {
-    e.preventDefault();
-    productInCart.splice(indexProduct, 1);
-
-    //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
-    localStorage.setItem('product', JSON.stringify(productInCart));
-
-    //Rechargement de la page pour qu'elle s'actualise
-    location.reload();
-
-    //Permet de vider le localStorage si c'est le dernier produit, car il renvoi un tableau vide
-    if (productInCart === null || (Array.isArray(productInCart) && productInCart.length === 0)) {
-      localStorage.clear();
+                      </div>
+                      </div>
+                      </div>
+                      </article>
+                    `;
+      structureProductCart.push(produit);
     }
-  });
-}
+    if (i === productInCart.length) {
+      cartItems.innerHTML = `${structureProductCart}`;
+    }
+    //---------------------- L'id d'un produit + Bouton supprimer------------------
+    const deleteItem = document.querySelectorAll('.deleteItem');
 
-//------------------------------- Montant total  + quantité total -------------------------------------
-function updateQuantityAndPrice() {
-  let total = 0;
-  let quantity = 0;
-  //Chercher les prix dans le panier
-  for (i = 0; i < productInCart.length; i++) {
-    let priceProductInCart = productInCart[i].price * productInCart[i].quantity;
+    for (k = 0; k < productInCart.length; k++) {
+      let indexProduct = k;
 
-    let quantityProductInCart = productInCart[i].quantity;
+      deleteItem[k].addEventListener('click', (e) => {
+        e.preventDefault();
+        productInCart.splice(indexProduct, 1);
 
-    total += priceProductInCart;
-    quantity += quantityProductInCart;
-  }
-  //Affichage des articles et des prix dans le HTML
-  document.getElementById('totalPrice').innerText = total;
-  document.getElementById('totalQuantity').innerText = quantity;
-}
+        //La transformation en format JSON et l'envoyer dans la key 'product' du localStorage :
+        localStorage.setItem('product', JSON.stringify(productInCart));
 
-updateQuantityAndPrice();
+        //Rechargement de la page pour qu'elle s'actualise
+        location.reload();
 
-//---------------------- Bouton quantité ------------------
+        //Permet de vider le localStorage si c'est le dernier produit, car il renvoi un tableau vide
+        if (productInCart === null || (Array.isArray(productInCart) && productInCart.length === 0)) {
+          localStorage.clear();
+        }
+      });
+    }
 
-const boutonQuantity = document.querySelectorAll('.itemQuantity');
+    //------------------------------- Montant total  + quantité total -------------------------------------
+    function updateQuantityAndPrice() {
+      let total = 0;
+      let quantity = 0;
+      //Chercher les prix dans le panier
+      for (i = 0; i < productInCart.length; i++) {
+        let priceProductInCart = productInCart[i].price * productInCart[i].quantity;
+        //console.log(priceProductInCart);
 
-for (let i = 0; i < productInCart.length; i++) {
-  let quantityValue = productInCart[i].quantity;
-  let price = productInCart[i].price;
+        let quantityProductInCart = productInCart[i].quantity;
 
-  let index = i;
+        total += priceProductInCart;
+        quantity += quantityProductInCart;
+      }
+      //Affichage des articles et des prix dans le HTML
+      document.getElementById('totalPrice').innerText = total;
+      document.getElementById('totalQuantity').innerText = quantity;
+    }
 
-  boutonQuantity[i].addEventListener('change', () => {
-    quantityValue = parseInt(boutonQuantity[index].value); // Passe les quantités en nombre entier
-    productInCart[index].quantity = quantityValue; // Passe les quantité en nombre entier sur tous les produits
+    updateQuantityAndPrice();
 
-    let total = price * quantityValue;
+    //---------------------- Bouton quantité ------------------
 
-    localStorage.setItem('product', JSON.stringify(productInCart)); //Modifie le localStorage
-    location.reload(); // permet de recharger la page en vue de mettre à jour le localStorage
+    const boutonQuantity = document.querySelectorAll('.itemQuantity');
 
-    document.getElementById('priceCart' + index).innerText = total;
+    for (let i = 0; i < productInCart.length; i++) {
+      let quantityValue = productInCart[i].quantity;
+      let price = productInCart[i].price;
 
-    document.getElementById('totalPrice').innerText = total;
+      let index = i;
+
+      boutonQuantity[i].addEventListener('change', () => {
+        quantityValue = parseInt(boutonQuantity[index].value); // Passe les quantités en nombre entier
+        productInCart[index].quantity = quantityValue; // Passe les quantité en nombre entier sur tous les produits
+
+        let total = price * quantityValue;
+
+        localStorage.setItem('product', JSON.stringify(productInCart)); //Modifie le localStorage
+        location.reload(); // permet de recharger la page en vue de mettre à jour le localStorage
+
+        document.getElementById('priceCart' + index).innerText = total;
+
+        document.getElementById('totalPrice').innerText = total;
+      });
+    }
   });
 }
 //-------------------------------- FORMULAIRES Prénom -------------------------------------
@@ -245,13 +257,12 @@ formOrder.addEventListener('submit', (e) => {
 
   //Mettre l'objet "formulaireValues" dans le local storage et le transformer en chaine de caractères avec "stringify" car c'était un objet
 
-  if (firstName() && lastName() && address() && city() && validationMail()) {
+  if (firstName() && lastName() && address() && city() && validationMail() && productInCart.length) {
     localStorage.setItem('formulaireValues', JSON.stringify(formulaireValues));
   } else {
     alert('Veuillez remplir correctement le formulaire');
     return false;
   }
-
   //Mettre les values du formulaire et du panier dans un objet pour les envoyer vers un serveur
   const aEnvoyer = {
     products: productInCart.map((product) => product._id),
@@ -269,7 +280,6 @@ formOrder.addEventListener('submit', (e) => {
     window.location = 'confirmation.html?orderId=' + response.orderId;
   });
 });
-
 /* //-------------------------------- Garder les identifiants quand on charge la page  -------------------------------------
 
 //Prendre la key dans le localstorage et la mettre dans une variable
